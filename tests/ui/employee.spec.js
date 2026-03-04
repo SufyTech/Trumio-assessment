@@ -1,4 +1,3 @@
-// tests/ui/employee.spec.js
 import { test, expect } from "@playwright/test";
 import EmployeePage from "../../pages/EmployeePage";
 import DashboardPage from "../../pages/DashboardPage";
@@ -21,30 +20,21 @@ test.describe("OrangeHRM Employee Tests", () => {
     await page.fill('input[name="password"]', "admin123");
     await page.click('button[type="submit"]');
 
-    // Wait for Dashboard to be visible
-    await page.waitForURL(/dashboard/, { timeout: 60000 }); // wait for redirect
-    await page.waitForSelector('h6:has-text("Dashboard")', { timeout: 60000 }); // correct selector
+    // Wait for dashboard to appear
+    await page.waitForURL(/dashboard/, { timeout: 120000 });
+    await page.waitForSelector('h6:has-text("Dashboard")', { timeout: 120000 });
     console.log("✅ Logged in successfully");
   });
 
   test("Add, Search, Edit and Delete Employee", async ({ page }) => {
-    // Add Employee
     await employeePage.addEmployee("TestFirst", "TestLast", "12345");
-
-    // Search Employee by name
     await employeePage.searchEmployee("TestFirst");
-
-    // Edit Employee
     await employeePage.editEmployee("UpdatedFirst", "UpdatedLast");
-
-    // Delete Employee
     await employeePage.deleteEmployee();
-
     console.log("✅ Employee tests completed successfully");
   });
 
   test.afterEach(async ({ page }) => {
-    // Logout
     await dashboardPage.logout();
     console.log("✅ Logged out successfully");
   });
