@@ -1,9 +1,9 @@
 // tests/ui/employee.spec.js
-import { test, expect } from "@playwright/test";
+import employeeData from "../../test-data/employeeData.json" assert { type: "json" };
 import LoginPage from "../../pages/LoginPage.js";
 import DashboardPage from "../../pages/DashboardPage.js";
 import EmployeePage from "../../pages/EmployeePage.js";
-import employeeData from "../../test-data/employeeData.json" assert { type: "json" };
+import { test, expect } from "@playwright/test";
 
 test.describe("Employee Management Tests", () => {
   let loginPage, dashboardPage, employeePage;
