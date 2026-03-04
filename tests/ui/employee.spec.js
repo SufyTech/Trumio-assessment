@@ -1,8 +1,8 @@
 // tests/ui/employee.spec.js
 import { test, expect } from "@playwright/test";
-import LoginPage from "../../pages/LoginPage";
-import DashboardPage from "../../pages/DashboardPage";
-import EmployeePage from "../../pages/EmployeePage";
+import LoginPage from "../../pages/LoginPage.js";
+import DashboardPage from "../../pages/DashboardPage.js";
+import EmployeePage from "../../pages/EmployeePage.js";
 import employeeData from "../../test-data/employeeData.json";
 
 test.describe("Employee Management Tests", () => {
