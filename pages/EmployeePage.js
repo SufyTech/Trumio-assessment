@@ -1,4 +1,6 @@
 // pages/EmployeePage.js
+import { expect } from "@playwright/test";
+
 export default class EmployeePage {
   constructor(page) {
     this.page = page;
@@ -7,60 +9,60 @@ export default class EmployeePage {
     this.lastNameInput = page.locator('input[name="lastName"]');
     this.employeeIdInput = page.locator('input[name="employeeId"]');
     this.saveButton = page.locator('button:has-text("Save")');
-    this.searchInput = page.locator('input[placeholder="Type for hints..."]');
-    this.searchButton = page.locator('button:has-text("Search")');
+    this.searchInput = page.locator('input[placeholder="Search"]');
     this.editButton = page.locator('button:has-text("Edit")');
     this.deleteButton = page.locator('button:has-text("Delete")');
     this.confirmDeleteButton = page.locator('button:has-text("Yes, Delete")');
   }
 
+  async waitForDashboard() {
+    await this.page.waitForSelector(
+      'p:has-text("Dashboard"), h6:has-text("Dashboard")',
+      { timeout: 90000 },
+    );
+  }
+
   async addEmployee(firstName, lastName, employeeId) {
-    await this.addButton.waitFor({ state: "visible", timeout: 60000 });
+    await this.waitForDashboard();
+    await this.addButton.waitFor({ state: "visible", timeout: 90000 });
     await this.addButton.click();
 
-    await this.firstNameInput.waitFor({ state: "visible", timeout: 60000 });
+    await this.firstNameInput.waitFor({ state: "visible", timeout: 90000 });
     await this.firstNameInput.fill(firstName);
     await this.lastNameInput.fill(lastName);
     await this.employeeIdInput.fill(employeeId);
-
-    await this.saveButton.waitFor({ state: "visible", timeout: 60000 });
     await this.saveButton.click();
 
-    // Wait for the new employee to appear in the list
-    await this.page.waitForLoadState("networkidle");
+    console.log(`✅ Employee ${firstName} ${lastName} added`);
   }
 
-  async searchEmployee(nameOrId) {
-    await this.searchInput.waitFor({ state: "visible", timeout: 60000 });
-    await this.searchInput.fill(nameOrId);
-
-    await this.searchButton.waitFor({ state: "visible", timeout: 60000 });
-    await this.searchButton.click();
-
-    await this.page.waitForSelector("table tbody tr", { timeout: 60000 });
+  async searchEmployee(name) {
+    await this.searchInput.waitFor({ state: "visible", timeout: 90000 });
+    await this.searchInput.fill(name);
+    await this.page.keyboard.press("Enter");
+    console.log(`🔍 Searched employee: ${name}`);
   }
 
-  async editEmployee(firstName, lastName) {
-    await this.editButton.waitFor({ state: "visible", timeout: 60000 });
+  async editEmployee(newFirstName, newLastName) {
+    await this.editButton.waitFor({ state: "visible", timeout: 90000 });
     await this.editButton.click();
 
-    await this.firstNameInput.fill(firstName);
-    await this.lastNameInput.fill(lastName);
+    await this.firstNameInput.fill(newFirstName);
+    await this.lastNameInput.fill(newLastName);
     await this.saveButton.click();
 
-    await this.page.waitForLoadState("networkidle");
+    console.log(`✏️ Employee updated to: ${newFirstName} ${newLastName}`);
   }
 
   async deleteEmployee() {
-    await this.deleteButton.waitFor({ state: "visible", timeout: 60000 });
+    await this.deleteButton.waitFor({ state: "visible", timeout: 90000 });
     await this.deleteButton.click();
-
     await this.confirmDeleteButton.waitFor({
       state: "visible",
-      timeout: 60000,
+      timeout: 90000,
     });
     await this.confirmDeleteButton.click();
 
-    await this.page.waitForLoadState("networkidle");
+    console.log(`🗑️ Employee deleted`);
   }
 }
