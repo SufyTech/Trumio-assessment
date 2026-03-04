@@ -1,5 +1,5 @@
 // pages/LoginPage.js
-class LoginPage {
+export default class LoginPage {
   constructor(page) {
     this.page = page;
     this.usernameInput = page.locator('input[name="username"]');
@@ -13,16 +13,9 @@ class LoginPage {
 
   async navigate() {
     await this.page.context().clearCookies();
-    await this.page.route("**/*", (route) => route.continue());
-
-    await this.page.goto(
-      "/web/index.php/auth/login", // relative to baseURL
-      {
-        waitUntil: "networkidle",
-        timeout: 60000,
-      },
-    );
-
+    await this.page.goto("/web/index.php/auth/login", {
+      waitUntil: "networkidle",
+    });
     await this.usernameInput.waitFor({ state: "visible", timeout: 30000 });
   }
 
@@ -40,5 +33,3 @@ class LoginPage {
     await this.errorMsg.waitFor({ state: "visible", timeout: 15000 });
   }
 }
-
-module.exports = { LoginPage };

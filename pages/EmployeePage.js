@@ -1,4 +1,5 @@
-class EmployeePage {
+// pages/EmployeePage.js
+export default class EmployeePage {
   constructor(page) {
     this.page = page;
     this.addButton = page.locator('button:has-text("Add")');
@@ -34,8 +35,6 @@ class EmployeePage {
 
   async deleteEmployee() {
     await this.deleteButton.click();
-    await this.page.locator('button:has-text("Confirm")').click(); // confirm delete
+    await this.page.locator('button:has-text("Confirm")').click();
   }
 }
-
-module.exports = EmployeePage;
