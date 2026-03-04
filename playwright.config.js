@@ -1,5 +1,7 @@
 // playwright.config.js
-import { defineConfig } from "@playwright/test";
+import { defineConfig, devices } from "@playwright/test";
+
+const isCI = !!process.env.CI; // Detect if running in CI
 
 export default defineConfig({
   testDir: "./tests",
@@ -15,7 +17,7 @@ export default defineConfig({
     navigationTimeout: 60000,
     actionTimeout: 60000,
     ignoreHTTPSErrors: true,
-    headless: false,
+    headless: isCI, // headless only in CI
     viewport: { width: 1280, height: 720 },
     trace: "on-first-retry",
   },
@@ -26,7 +28,7 @@ export default defineConfig({
       use: {
         browserName: "chromium",
         channel: "msedge", // uses installed Edge
-        headless: false,
+        headless: isCI, // headless in CI, headed locally
       },
     },
   ],
