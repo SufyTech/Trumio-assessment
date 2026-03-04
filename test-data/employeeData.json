@@ -1,0 +1,15 @@
+{
+  "credentials": {
+    "username": "Admin",
+    "password": "admin123"
+  },
+  "newEmployee": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "id": "1001"
+  },
+  "updatedEmployee": {
+    "firstName": "Johnny",
+    "lastName": "DoeUpdated"
+  }
+}
