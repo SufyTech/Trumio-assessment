@@ -11,31 +11,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repo
+      # 1️⃣ Checkout the repository
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # 2. Setup Node.js
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
-      # 3. Install dependencies
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: npm ci
 
-      # 4. Install Playwright browsers (including Edge)
+      # 4️⃣ Install Playwright browsers (Edge included)
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      # 5. Run Playwright tests in headless mode
+      # 5️⃣ Run Playwright tests in headless mode (Edge)
       - name: Run Playwright Tests
+        env:
+          CI: true # ensures headless mode in playwright.config.js
         run: npx playwright test --reporter=html
 
-      # 6. Upload HTML report as artifact
+      # 6️⃣ Upload HTML report as artifact
       - name: Upload Playwright Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
