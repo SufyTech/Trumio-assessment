@@ -1,4 +1,5 @@
-const { test, expect, request } = require("@playwright/test");
+// tests/api/store.spec.js
+import { test, expect, request } from "@playwright/test";
 
 const storeData = {
   order: {
@@ -37,9 +38,7 @@ test.describe("Store API Tests", () => {
   });
 
   test("Delete Purchase Order", async () => {
-    const response = await apiContext.delete(
-      `/store/order/${storeData.order.id}`,
-    );
+    const response = await apiContext.delete(`/store/order/${storeData.order.id}`);
     expect(response.ok()).toBeTruthy();
   });
 });

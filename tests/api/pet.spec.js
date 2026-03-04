@@ -1,4 +1,5 @@
-const { test, expect, request } = require("@playwright/test");
+// tests/api/pet.spec.js
+import { test, expect, request } from "@playwright/test";
 
 test.describe("Swagger Pet Store API", () => {
   const petId = Math.floor(Math.random() * 100000); // unique pet ID
@@ -47,7 +48,6 @@ test.describe("Swagger Pet Store API", () => {
     expect(response.status()).toBe(200);
   });
 
-  // Optional: Store endpoints
   const orderId = Math.floor(Math.random() * 100000);
 
   test("Place a new order", async ({ request }) => {
