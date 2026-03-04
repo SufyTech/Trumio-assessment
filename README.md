@@ -1,83 +1,45 @@
 # Trumio Playwright Automation Framework
 
-This repository contains my implementation of a **UI and API automation framework** using **Playwright with JavaScript/TypeScript**. The purpose of this assessment was to design a maintainable and robust testing framework for the **OrangeHRM Demo application** and the **Swagger Pet Store API**, covering end-to-end workflows, CRUD operations, and automated reporting.
+This repository contains a **robust UI and API automation framework** built with **Playwright (JavaScript/TypeScript)**. It demonstrates end-to-end automation for the **OrangeHRM Demo application** and the **Swagger Pet Store API**, following best practices in maintainable test design, Page Object Model (POM), and CI/CD integration.
 
-The framework emphasizes **reliability, maintainability, and clarity**, using the **Page Object Model (POM)** for UI tests, proper test data management, and automated CI/CD execution via **GitHub Actions**.
+> ⚠️ **Note:** All UI and API tests are implemented. Some tests may fail due to unstable selectors or API responses, but the framework, structure, and test logic are complete.
 
 ---
 
-## Key Learnings
+## Key Highlights
 
-- Structuring UI tests with **Page Object Model (POM)** improves readability and reduces code duplication.
-- Separating **UI and API tests** in different folders ensures modularity and easier maintenance.
-- Proper **test data management** using JSON files allows testing multiple scenarios efficiently.
-- Integration with **GitHub Actions** enables automated CI/CD execution with **headless browser tests**.
-- Generating **HTML reports** provides clear visibility of test execution results.
+- **UI Automation**: Page Object Model, positive & negative scenarios, detailed logs, HTML reports.
+- **API Automation**: CRUD operations for Pet & Store endpoints, response assertions, error handling, and reporting.
+- **CI/CD Integration**: Automated GitHub Actions workflow with headless test execution and report artifacts.
+- **Modular Structure**: Separate folders for **UI** and **API** tests, with JSON-based test data management.
 
 ---
 
 ## Assessment Coverage
 
-### UI Automation – OrangeHRM
+### OrangeHRM – UI Automation
 
-Tested the application: [OrangeHRM Demo](https://opensource-demo.orangehrmlive.com/web/index.php/auth/login)
+- **Login & Logout workflows** (validations & error scenarios)
+- **Employee Management** (PIM module):
+  - Add, search, edit, and delete employees
+  - Filter verification by name, ID, and job title
+  - Validate success/error messages
 
-**Test Scenarios Implemented:**
+### Swagger Pet Store – API Automation
 
-1. Validate **Login and Logout** workflows (positive & negative scenarios).
-2. Automate **Employee Management** under PIM module:
-   - Create new employee records
-   - Verify employee in the list using filters (Name, ID, Job Title)
-   - Update employee details
-   - Delete employee records
-   - Validate **success/error messages** for all operations
-
-**Technical Requirements Implemented:**
-
-- Proper **test data management** via JSON files
-- Coverage of **positive and negative scenarios**
-- Error handling for critical UI operations
-- Detailed **test logs**
-- **HTML test reports** for execution visibility
-
----
-
-### API Automation – Swagger Pet Store
-
-Tested the API: [Swagger Pet Store](https://petstore.swagger.io/)
-
-**Pet Endpoints:**
-
-1. Add a new pet
-2. Update an existing pet
-3. Find pet by ID
-4. Delete a pet
-
-**Store Endpoints:**
-
-1. Place an order for a pet
-2. Find purchase order by ID
-3. Delete purchase order
-
-**Technical Requirements Implemented:**
-
-- Test data management using JSON
-- Positive & negative scenario coverage
-- Assertions for **response validation**
-- Error handling and logging
-- HTML reports for **API test execution**
+- **Pet Endpoints**: Add, update, find, delete pet
+- **Store Endpoints**: Place order, find order by ID, delete order
 
 ---
 
 ## Framework Features
 
-- **Page Object Model (POM)** for UI tests
-- **JSON-based test data management**
-- Positive and negative scenario coverage
-- **HTML test reports** for easy result analysis
-- **Error handling** for all critical operations
-- **GitHub Actions** CI/CD workflow with artifact upload
-- Separate folder structure for **UI (`tests/ui`)** and **API (`tests/api`)** tests
+- **Page Object Model (POM)** for clean, maintainable UI tests
+- **JSON test data management** for reusability
+- **Positive & negative test scenarios** coverage
+- **Error handling** and detailed logs
+- **HTML reports** for easy result review
+- **GitHub Actions** CI/CD workflow with test artifact uploads
 
 ---
 
@@ -85,51 +47,34 @@ Tested the API: [Swagger Pet Store](https://petstore.swagger.io/)
 
 ```
 ├── tests/
-│   ├── ui/
-│   │   ├── login.spec.js
-│   │   ├── employee.spec.js
-│   ├── api/
-│   │   ├── pet.spec.js
-│   │   └── store.spec.js
-├── pages/
-│   ├── LoginPage.js
-│   ├── DashboardPage.js
-│   └── EmployeePage.js
-├── test-data/
-│   ├── loginData.json
-│   └── employeeData.json
-├── playwright.config.js
-├── package.json
-├── .github/
-│   └── workflows/playwright.yml
-└── README.md
+│   ├── ui/               # UI test files
+│   └── api/              # API test files
+├── pages/                # Page Object Model classes
+├── test-data/            # JSON test data files
+├── playwright.config.js  # Playwright configuration
+├── package.json          # Dependencies
+├── .github/workflows/    # CI/CD workflow
+└── README.md             # Project documentation
 ```
 
 ---
 
 ## Setup Instructions
 
-1. Clone the repository:
-
 ```bash
 git clone <your-repo-link>
 cd trumio-playwright-framework
-```
-
-2. Install dependencies:
-
-```bash
 npm ci
 npx playwright install --with-deps
 ```
 
-3. Run **UI + API tests** locally:
+Run **UI + API tests** locally:
 
 ```bash
 npx playwright test
 ```
 
-4. View **HTML reports**:
+View **HTML test reports**:
 
 ```bash
 npx playwright show-report
@@ -137,29 +82,21 @@ npx playwright show-report
 
 ---
 
-## CI/CD – GitHub Actions
+## Skills Demonstrated
 
-- Workflow automatically installs dependencies and runs tests in **headless mode**.
-- Generates and uploads **HTML reports** as artifacts.
-- Reports can be downloaded from: **Actions → Artifacts** in GitHub.
+- **Playwright** (UI & API automation)
+- **JavaScript/TypeScript**
+- **Page Object Model (POM)** implementation
+- **CI/CD** (GitHub Actions)
+- **Test Data Management & Logging**
+- **HTML Test Reporting**
+- **QA Best Practices**
 
 ---
 
 ## Next Steps / Future Improvements
 
-- Extend test coverage for additional modules in OrangeHRM.
-- Add **data-driven testing** for API endpoints using external JSON/CSV files.
-- Implement **parallel test execution** for faster test runs.
-- Integrate **Slack or Email notifications** for automated test result reporting.
-
----
-
-## Skills Demonstrated
-
-- **Playwright** & **JavaScript/TypeScript**
-- **UI Automation** & **API Automation**
-- **Page Object Model (POM)** implementation
-- **Test Data Management**
-- **CI/CD with GitHub Actions**
-- **Test Reporting** (HTML reports)
-- **Error Handling** and **QA Best Practices**
+- Extend coverage to additional OrangeHRM modules
+- Implement **data-driven testing** for API endpoints
+- Enable **parallel test execution** for faster runs
+- Integrate **Slack/Email notifications** for CI/CD reports
