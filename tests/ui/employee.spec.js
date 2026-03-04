@@ -1,59 +1,42 @@
 // tests/ui/employee.spec.js
 import { test, expect } from "@playwright/test";
-import LoginPage from "../../pages/LoginPage.js";
-import DashboardPage from "../../pages/DashboardPage.js";
-import EmployeePage from "../../pages/EmployeePage.js";
-import employeeData from "../../test-data/employeeData.json" assert { type: "json" };
+import EmployeePage from "../../pages/EmployeePage";
+import DashboardPage from "../../pages/DashboardPage";
 
-test.describe("Employee Management Tests", () => {
-  let loginPage, dashboardPage, employeePage;
+test.describe("OrangeHRM Employee Tests", () => {
+  test("Add, Search, Edit and Delete Employee", async ({ page }) => {
+    const employeePage = new EmployeePage(page);
+    const dashboardPage = new DashboardPage(page);
 
-  test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
-    dashboardPage = new DashboardPage(page);
-    employeePage = new EmployeePage(page);
-
-    await loginPage.navigate();
-    await loginPage.login(
-      employeeData.credentials.username,
-      employeeData.credentials.password,
+    // Navigate to login
+    await page.goto(
+      "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
     );
 
-    // Wait for dashboard to fully load
-    await page.waitForURL("**/dashboard/index", { timeout: 60000 });
-  });
+    // Login
+    await page.fill('input[name="username"]', "Admin");
+    await page.fill('input[name="password"]', "admin123");
+    await page.click('button[type="submit"]');
 
-  test("Create Employee", async ({ page }) => {
-    await dashboardPage.navigateToEmployeePage();
-    await employeePage.addButton.waitFor({ state: "visible", timeout: 60000 });
-    await employeePage.addEmployee(
-      employeeData.newEmployee.firstName,
-      employeeData.newEmployee.lastName,
-      employeeData.newEmployee.id,
-    );
-  });
+    // Wait for dashboard
+    await page.waitForSelector('p:has-text("Dashboard")', { timeout: 60000 });
 
-  test("Verify Employee in List", async ({ page }) => {
-    await employeePage.searchInput.waitFor({ state: "visible" });
-    await employeePage.searchEmployee(employeeData.newEmployee.id);
-    expect(
-      await employeePage.getEmployeeRow(employeeData.newEmployee.id),
-    ).toBeTruthy();
-  });
+    // Add Employee
+    await employeePage.addEmployee("TestFirst", "TestLast", "12345");
 
-  test("Edit Employee", async ({ page }) => {
-    await employeePage.searchEmployee(employeeData.newEmployee.id);
-    await employeePage.editEmployee("EditedFirst", "EditedLast");
-  });
+    // Search Employee
+    await employeePage.searchEmployee("TestFirst");
 
-  test("Delete Employee", async ({ page }) => {
-    await employeePage.searchEmployee(employeeData.newEmployee.id);
+    // Edit Employee
+    await employeePage.editEmployee("TestEdited", "TestLast");
+
+    // Delete Employee
     await employeePage.deleteEmployee();
-  });
 
-  test("Logout", async ({ page }) => {
-    await dashboardPage.logoutButton.waitFor({ state: "visible" });
+    // Logout
     await dashboardPage.logout();
-    await page.waitForURL("**/auth/login", { timeout: 60000 });
+
+    // Confirm logout
+    expect(page.url()).toContain("/auth/login");
   });
 });

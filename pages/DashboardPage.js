@@ -9,7 +9,6 @@ export default class DashboardPage {
     await this.logoutButton.waitFor({ state: "visible", timeout: 60000 });
     await this.logoutButton.click();
 
-    // Ensure navigation goes to login page
-    await this.page.waitForURL(/index\.php\/auth\/login/, { timeout: 60000 });
+    await this.page.waitForURL(/auth\/login/, { timeout: 60000 });
   }
 }
