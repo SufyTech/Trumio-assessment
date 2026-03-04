@@ -12,49 +12,55 @@ export default class EmployeePage {
     this.editButton = page.locator('button:has-text("Edit")');
     this.deleteButton = page.locator('button:has-text("Delete")');
     this.confirmDeleteButton = page.locator('button:has-text("Yes, Delete")');
-    this.tableRows = page.locator("table tbody tr"); // for waiting search results
   }
 
   async addEmployee(firstName, lastName, employeeId) {
     await this.addButton.waitFor({ state: "visible", timeout: 60000 });
     await this.addButton.click();
 
+    await this.firstNameInput.waitFor({ state: "visible", timeout: 60000 });
     await this.firstNameInput.fill(firstName);
     await this.lastNameInput.fill(lastName);
     await this.employeeIdInput.fill(employeeId);
 
+    await this.saveButton.waitFor({ state: "visible", timeout: 60000 });
     await this.saveButton.click();
-    // Wait for the table to update after adding
-    await this.tableRows.first().waitFor({ state: "visible", timeout: 60000 });
+
+    // Wait for the new employee to appear in the list
+    await this.page.waitForLoadState("networkidle");
   }
 
   async searchEmployee(nameOrId) {
+    await this.searchInput.waitFor({ state: "visible", timeout: 60000 });
     await this.searchInput.fill(nameOrId);
+
+    await this.searchButton.waitFor({ state: "visible", timeout: 60000 });
     await this.searchButton.click();
 
-    // Wait for at least one row to appear
-    await this.tableRows.first().waitFor({ state: "visible", timeout: 60000 });
+    await this.page.waitForSelector("table tbody tr", { timeout: 60000 });
   }
 
   async editEmployee(firstName, lastName) {
+    await this.editButton.waitFor({ state: "visible", timeout: 60000 });
     await this.editButton.click();
 
     await this.firstNameInput.fill(firstName);
     await this.lastNameInput.fill(lastName);
-
     await this.saveButton.click();
-    await this.tableRows.first().waitFor({ state: "visible", timeout: 60000 });
+
+    await this.page.waitForLoadState("networkidle");
   }
 
   async deleteEmployee() {
+    await this.deleteButton.waitFor({ state: "visible", timeout: 60000 });
     await this.deleteButton.click();
+
+    await this.confirmDeleteButton.waitFor({
+      state: "visible",
+      timeout: 60000,
+    });
     await this.confirmDeleteButton.click();
 
-    // Wait until at least the first row disappears or table updates
-    await this.page.waitForTimeout(1000); // small pause to allow delete to reflect
-    await this.tableRows
-      .first()
-      .waitFor({ state: "visible", timeout: 60000 })
-      .catch(() => {});
+    await this.page.waitForLoadState("networkidle");
   }
 }
