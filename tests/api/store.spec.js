@@ -1,24 +1,42 @@
 // tests/api/store.spec.js
 import { test, expect, request } from "@playwright/test";
 
-const storeData = {
-  order: {
-    id: 12345,
-    petId: 101,
-    quantity: 1,
-    shipDate: "2026-03-04T10:00:00.000Z",
-    status: "placed",
-    complete: true,
-  },
-};
-
 test.describe("Store API Tests", () => {
   let apiContext;
+  let storeData;
 
-  test.beforeAll(async ({ playwright }) => {
+  test.beforeAll(async () => {
     apiContext = await request.newContext({
       baseURL: "https://petstore.swagger.io/v2",
+      extraHTTPHeaders: {
+        "Content-Type": "application/json",
+      },
     });
+
+    // Dynamic IDs to avoid conflicts in CI
+    const randomId = Math.floor(Math.random() * 100000);
+    const petId = randomId + 1000;
+
+    storeData = {
+      order: {
+        id: randomId,
+        petId: petId,
+        quantity: 1,
+        shipDate: new Date().toISOString(),
+        status: "placed",
+        complete: true,
+      },
+      pet: {
+        id: petId,
+        name: `TempPet-${petId}`,
+        photoUrls: [],
+        status: "available",
+      },
+    };
+
+    // Create the pet first
+    const petResponse = await apiContext.post("/pet", { data: storeData.pet });
+    expect(petResponse.ok()).toBeTruthy();
   });
 
   test("Place Order", async () => {
@@ -26,6 +44,7 @@ test.describe("Store API Tests", () => {
       data: storeData.order,
     });
     expect(response.ok()).toBeTruthy();
+
     const body = await response.json();
     expect(body.id).toBe(storeData.order.id);
   });
@@ -33,12 +52,15 @@ test.describe("Store API Tests", () => {
   test("Find Purchase Order by ID", async () => {
     const response = await apiContext.get(`/store/order/${storeData.order.id}`);
     expect(response.ok()).toBeTruthy();
+
     const body = await response.json();
     expect(body.id).toBe(storeData.order.id);
   });
 
   test("Delete Purchase Order", async () => {
-    const response = await apiContext.delete(`/store/order/${storeData.order.id}`);
+    const response = await apiContext.delete(
+      `/store/order/${storeData.order.id}`,
+    );
     expect(response.ok()).toBeTruthy();
   });
 });

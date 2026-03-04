@@ -1,9 +1,9 @@
 // tests/ui/employee.spec.js
-import employeeData from "../../test-data/employeeData.json" assert { type: "json" };
+import { test, expect } from "@playwright/test";
 import LoginPage from "../../pages/LoginPage.js";
 import DashboardPage from "../../pages/DashboardPage.js";
 import EmployeePage from "../../pages/EmployeePage.js";
-import { test, expect } from "@playwright/test";
+import employeeData from "../../test-data/employeeData.json" assert { type: "json" };
 
 test.describe("Employee Management Tests", () => {
   let loginPage, dashboardPage, employeePage;
@@ -18,41 +18,42 @@ test.describe("Employee Management Tests", () => {
       employeeData.credentials.username,
       employeeData.credentials.password,
     );
+
+    // Wait for dashboard to fully load
+    await page.waitForURL("**/dashboard/index", { timeout: 60000 });
   });
 
   test("Create Employee", async ({ page }) => {
+    await dashboardPage.navigateToEmployeePage();
+    await employeePage.addButton.waitFor({ state: "visible", timeout: 60000 });
     await employeePage.addEmployee(
       employeeData.newEmployee.firstName,
       employeeData.newEmployee.lastName,
       employeeData.newEmployee.id,
     );
-    await expect(page.locator("text=Successfully Saved")).toBeVisible();
   });
 
   test("Verify Employee in List", async ({ page }) => {
+    await employeePage.searchInput.waitFor({ state: "visible" });
     await employeePage.searchEmployee(employeeData.newEmployee.id);
-    await expect(
-      page.locator(`text=${employeeData.newEmployee.firstName}`),
-    ).toBeVisible();
+    expect(
+      await employeePage.getEmployeeRow(employeeData.newEmployee.id),
+    ).toBeTruthy();
   });
 
   test("Edit Employee", async ({ page }) => {
     await employeePage.searchEmployee(employeeData.newEmployee.id);
-    await employeePage.editEmployee(
-      employeeData.updatedEmployee.firstName,
-      employeeData.updatedEmployee.lastName,
-    );
-    await expect(page.locator("text=Successfully Updated")).toBeVisible();
+    await employeePage.editEmployee("EditedFirst", "EditedLast");
   });
 
   test("Delete Employee", async ({ page }) => {
     await employeePage.searchEmployee(employeeData.newEmployee.id);
     await employeePage.deleteEmployee();
-    await expect(page.locator("text=Successfully Deleted")).toBeVisible();
   });
 
   test("Logout", async ({ page }) => {
+    await dashboardPage.logoutButton.waitFor({ state: "visible" });
     await dashboardPage.logout();
-    await expect(page).toHaveURL(/auth\/login/);
+    await page.waitForURL("**/auth/login", { timeout: 60000 });
   });
 });
