@@ -1,8 +1,9 @@
-const { test, expect } = require("@playwright/test");
-const LoginPage = require("../../pages/LoginPage");
-const DashboardPage = require("../../pages/DashboardPage");
-const EmployeePage = require("../../pages/EmployeePage");
-const employeeData = require("../../test-data/employeeData.json");
+// tests/ui/employee.spec.js
+import { test, expect } from "@playwright/test";
+import LoginPage from "../../pages/LoginPage";
+import DashboardPage from "../../pages/DashboardPage";
+import EmployeePage from "../../pages/EmployeePage";
+import employeeData from "../../test-data/employeeData.json";
 
 test.describe("Employee Management Tests", () => {
   let loginPage, dashboardPage, employeePage;

@@ -1,6 +1,6 @@
 // tests/ui/login.spec.js
-const { test } = require("@playwright/test");
-const { LoginPage } = require("../../pages/LoginPage");
+import { test, expect } from "@playwright/test";
+import LoginPage from "../../pages/LoginPage";
 
 test.describe("OrangeHRM Login Tests", () => {
   test("Valid Login Test", async ({ page }) => {
